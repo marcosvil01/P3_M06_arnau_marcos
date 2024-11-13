@@ -6,6 +6,8 @@ import org.xmldb.api.base.ResourceSet;
 
 import static Exercici_01.Resources.printResult.printResult;
 
+/// Crea una consulta per llistar els articles amb un USPrice superior a 500.00.
+
 public class ListExpensiveItems {
     public void execute(Collection col) throws Exception {
         XQueryService service = (XQueryService) col.getService("XQueryService", "1.0");
@@ -14,6 +16,9 @@ public class ListExpensiveItems {
             return $item
         """;
         ResourceSet result = service.query(xquery);
+        System.out.println(" ################################################### ");
+        System.out.println(" ### Articles amb un preu superior de 500.00 USD ### ");
+        System.out.println(" ################################################### ");
         printResult(result);
     }
 }

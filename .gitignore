@@ -37,6 +37,6 @@ build/
 ### Mac OS ###
 .DS_Store
 
-
 ### Enviroment ###
 src/main/resources/.env
+output/*

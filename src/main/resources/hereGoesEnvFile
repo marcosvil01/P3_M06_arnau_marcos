@@ -1,0 +1,6 @@
+### El fitxer .env és un fitxer tal que aixi:
+
+URI=xmldb:exist://localhost:8080/exist/xmlrpc
+COLLECTION_PATH=/db/PurchaseOrders
+USERNAME=admin
+PASSWORD=

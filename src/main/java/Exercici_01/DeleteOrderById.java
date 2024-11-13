@@ -3,6 +3,8 @@ package Exercici_01;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.modules.XQueryService;
 
+/// Esborra la comanda amb id="2".
+
 public class DeleteOrderById {
     public void execute(Collection col) throws Exception {
         XQueryService service = (XQueryService) col.getService("XQueryService", "1.0");

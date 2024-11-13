@@ -3,6 +3,9 @@ package Exercici_01;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.modules.XQueryService;
 
+/// A la comanda amb id="1", canvia la Quantity de l’article amb
+/// ProductName="Mouse" a 5.
+
 public class UpdateOrderQuantity {
     public void execute(Collection col) throws Exception {
         XQueryService service = (XQueryService) col.getService("XQueryService", "1.0");

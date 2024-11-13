@@ -3,6 +3,11 @@ package Exercici_01;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.modules.XQueryService;
 
+/// Afegeix una nova comanda amb id="4", OrderDate="2024-01-20", amb
+/// informació d’enviament per a un client anomenat "Michael Brown" que viu a
+/// "Chicago, IL 60601, USA" i un únic article: ProductName="Monitor",
+/// Quantity="1", USPrice="200.00".
+
 public class AddNewOrder {
     public void execute(Collection col) throws Exception {
         XQueryService service = (XQueryService) col.getService("XQueryService", "1.0");
