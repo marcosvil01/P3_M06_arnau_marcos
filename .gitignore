@@ -40,3 +40,4 @@ build/
 ### Enviroment ###
 src/main/resources/.env
 output/*
+!output/folderOutput.txt

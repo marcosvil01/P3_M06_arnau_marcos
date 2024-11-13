@@ -1,0 +1,1 @@
+Aquesta carpeta serveix per emmagatzemzar els fitxers de sortida de la pràctica.
