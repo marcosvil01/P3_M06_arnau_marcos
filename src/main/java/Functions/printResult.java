@@ -1,4 +1,4 @@
-package Exercici_01.Resources;
+package Functions;
 
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.ResourceSet;

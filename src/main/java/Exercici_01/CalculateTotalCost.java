@@ -8,6 +8,7 @@ import org.xmldb.api.modules.XQueryService;
 
 public class CalculateTotalCost {
     public void execute(Collection col) throws Exception {
+        System.out.println("\u001B[90m🚀 Començant exercici ...\u001B[0m");
         XQueryService service = (XQueryService) col.getService("XQueryService", "1.0");
         String xquery = """
             for $order in doc("PurchaseOrders.xml")/PurchaseOrders/PurchaseOrder
@@ -18,5 +19,6 @@ public class CalculateTotalCost {
             return <Order id="{$order/@id}" TotalCost="{$total}"/>
         """;
         service.query(xquery);
+        System.out.println("\u001B[32mExercici fet!✅\u001B[0m");
     }
 }

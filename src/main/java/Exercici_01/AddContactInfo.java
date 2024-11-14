@@ -8,6 +8,7 @@ import org.xmldb.api.modules.XQueryService;
 
 public class AddContactInfo {
     public void execute(Collection col) throws Exception {
+        System.out.println("\u001B[90m🚀 Començant exercici ...\u001B[0m");
         XQueryService service = (XQueryService) col.getService("XQueryService", "1.0");
         String xquery = """
             for $shipTo in /PurchaseOrders/PurchaseOrder/ShipTo
@@ -15,5 +16,6 @@ public class AddContactInfo {
             return update insert $contact into $shipTo
         """;
         service.query(xquery);
+        System.out.println("\u001B[32mExercici fet!✅\u001B[0m");
     }
 }

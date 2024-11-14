@@ -1,4 +1,4 @@
-package Exercici_01.Resources;
+package Functions;
 
 import java.io.FileWriter;
 import java.io.IOException;

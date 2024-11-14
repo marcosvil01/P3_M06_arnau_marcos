@@ -2,6 +2,7 @@ package db;
 
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
+import org.xmldb.api.base.Database;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
@@ -25,21 +26,23 @@ public class DBConnection {
             COLLECTION_PATH = props.getProperty("COLLECTION_PATH");
             USERNAME = props.getProperty("USERNAME");
             PASSWORD = props.getProperty("PASSWORD");
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.err.println("Error loading .env file: " + e.getMessage());
         }
     }
 
     public static Collection getCollection() throws Exception {
         try {
-            // Registre de la base de dades eXistDB
+            // Registro de la base de datos eXistDB
             Class<?> cl = Class.forName("org.exist.xmldb.DatabaseImpl");
-            DatabaseManager.registerDatabase((org.xmldb.api.base.Database) cl.newInstance());
+            Database database = (Database) cl.getDeclaredConstructor().newInstance();
+            DatabaseManager.registerDatabase(database);
 
-            // Connexió a la col·lecció
+            // Conexión a la colección
             Collection col = DatabaseManager.getCollection(URI + COLLECTION_PATH, USERNAME, PASSWORD);
             if (col == null) {
-                System.out.println("\"Error: Unable to access collection at path \" + COLLECTION_PATH + \". Please verify that the collection exists and the URI is correct.");
+                System.err.println("Error: Unable to access collection at path " + COLLECTION_PATH + ". Please verify that the collection exists and the URI is correct.");
+                return null;
             }
             System.out.println("Successfully connected to collection: " + COLLECTION_PATH);
             return col;
@@ -49,6 +52,17 @@ public class DBConnection {
         } catch (Exception e) {
             System.err.println("General error during connection setup: " + e.getMessage());
             throw e;
+        }
+    }
+
+    public static void closeCollection(Collection col) {
+        if (col != null) {
+            try {
+                col.close();
+                System.out.println("Collection closed successfully.");
+            } catch (XMLDBException e) {
+                System.err.println("Error closing collection: " + e.getMessage());
+            }
         }
     }
 }

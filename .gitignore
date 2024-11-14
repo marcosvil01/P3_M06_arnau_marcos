@@ -40,4 +40,5 @@ build/
 ### Enviroment ###
 src/main/resources/.env
 output/*
+!output/SeattleOrders.xml
 !output/folderOutput.txt

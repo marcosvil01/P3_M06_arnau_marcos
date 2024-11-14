@@ -7,11 +7,13 @@ import org.xmldb.api.modules.XQueryService;
 
 public class ModifyCustomerAddress {
     public void execute(Collection col) throws Exception {
+        System.out.println("\u001B[90m🚀 Començant exercici ...\u001B[0m");
         XQueryService service = (XQueryService) col.getService("XQueryService", "1.0");
         String xquery = """
             update replace /PurchaseOrders/PurchaseOrder/ShipTo[Name='Emily Johnson']/Address
             with <Address>San Francisco, CA 94103, USA</Address>
         """;
         service.query(xquery);
+        System.out.println("\u001B[32mExercici fet!✅\u001B[0m");
     }
 }
