@@ -1,6 +1,7 @@
 import db.DBConnection;
 import Exercici_01.*;
 import Exercici_02.*;
+import Exercici_03.*;
 import org.xmldb.api.base.Collection;
 
 import java.util.Scanner;
@@ -21,6 +22,7 @@ public class Main {
                 System.out.println("\nSeleccione el ejercicio que desea ejecutar:");
                 System.out.println("1. Exercici_01");
                 System.out.println("2. Exercici_02");
+                System.out.println("3. Exercici_03");
                 System.out.println("0. Salir");
                 System.out.print("Opción: ");
                 int option = scanner.nextInt();
@@ -31,6 +33,9 @@ public class Main {
                         break;
                     case 2:
                         executeExercici02(collection);
+                        break;
+                    case 3:
+                        executeExercici03(collection);
                         break;
                     case 0:
                         running = false;
@@ -75,4 +80,20 @@ public class Main {
         new DeleteThirdPurchaseOrder().execute(collection);   // 2.g
         new CountAllPurchaseOrders().execute(collection);     // 2.h
     }
+
+    private static void executeExercici03(Collection collection) throws Exception {
+        System.out.println("Ejecutando Exercici_03...");
+
+        // Executar els subapartats de l'Exercici 3
+        new AddRecipe().execute(collection);  // 3.a
+        new UpdateRecipeDifficulty().execute(collection);  // 3.b
+        new AddIngredientToTiramisu().execute(collection);  // 3.c
+        new DeleteRecipe().execute(collection);  // 3.d
+        new ListIngredients().execute(collection);  // 3.e
+        new SumCalories().execute(collection);  // 3.f
+        new AddNoteToRecipes().execute(collection);  // 3.g
+        new UpdateRecipeStep().execute(collection);  // 3.h
+        new GenerateRecipeIndex().execute(collection);  // 3.i
+    }
+
 }
