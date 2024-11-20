@@ -1,6 +1,6 @@
 package Exercici_02;
 
-import Functions.printResult;
+import Functions.Functions;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.modules.XQueryService;
@@ -16,7 +16,7 @@ public class RenamePurchaseOrderToVentas {
         """;
         ResourceSet result = service.query(xquery);
 
-        printResult.printResult(result);
+        Functions.printResult(result);
         System.out.println("\u001B[32mExercici 2.e fet!✅\u001B[0m");
     }
 }

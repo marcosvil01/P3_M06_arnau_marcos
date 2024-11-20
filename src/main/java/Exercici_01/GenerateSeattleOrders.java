@@ -1,11 +1,11 @@
 package Exercici_01;
 
+import Functions.Functions;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.modules.XQueryService;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.Resource;
 
-import static Functions.writeToFile.writeToFile;
 
 /// A partir de l'XML original, genera un nou document XML que només contingui les
 /// comandes de clients de Seattle.
@@ -29,7 +29,7 @@ public class GenerateSeattleOrders {
         }
 
         // Escriu el contingut a un nou fitxer XML
-        writeToFile(xmlOutput.toString(), "SeattleOrders.xml");
+        Functions.writeToFile(xmlOutput.toString(), "SeattleOrders.xml");
         System.out.println("\u001B[32mExercici fet!✅\u001B[0m");
     }
 }

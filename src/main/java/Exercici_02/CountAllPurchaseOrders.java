@@ -1,6 +1,6 @@
 package Exercici_02;
 
-import Functions.printResult;
+import Functions.Functions;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.modules.XQueryService;
 import org.xmldb.api.base.ResourceSet;
@@ -16,7 +16,7 @@ public class CountAllPurchaseOrders {
             return <TotalPurchaseOrders>{$count}</TotalPurchaseOrders>
         """;
         ResourceSet result = service.query(xquery);
-        printResult.printResult(result);
+        Functions.printResult(result);
 
         System.out.println("\u001B[32mExercici 2.h fet!✅\u001B[0m");
     }

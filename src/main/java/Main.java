@@ -2,6 +2,7 @@ import db.DBConnection;
 import Exercici_01.*;
 import Exercici_02.*;
 import Exercici_03.*;
+import Exercici_04.*;
 import org.xmldb.api.base.Collection;
 
 import java.util.Scanner;
@@ -23,6 +24,7 @@ public class Main {
                 System.out.println("1. Exercici_01");
                 System.out.println("2. Exercici_02");
                 System.out.println("3. Exercici_03");
+                System.out.println("4. Exercici_04");
                 System.out.println("0. Salir");
                 System.out.print("Opción: ");
                 int option = scanner.nextInt();
@@ -37,6 +39,9 @@ public class Main {
                     case 3:
                         executeExercici03(collection);
                         break;
+                    case 4:
+                        executeExercici04(collection);
+                        break;
                     case 0:
                         running = false;
                         break;
@@ -45,7 +50,7 @@ public class Main {
                 }
             }
 
-            collection.close(); // Cerrar la colección después de todas las operaciones
+            collection.close();
             scanner.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,7 +60,6 @@ public class Main {
     private static void executeExercici01(Collection collection) throws Exception {
         System.out.println("Ejecutando Exercici_01...");
 
-        // Ejecuta las operaciones del Exercici_01
         new AddNewOrder().execute(collection);  // 1.a
         new DeleteOrderById().execute(collection);  // 1.b
         new UpdateOrderQuantity().execute(collection);  // 1.c
@@ -70,7 +74,6 @@ public class Main {
     private static void executeExercici02(Collection collection) throws Exception {
         System.out.println("Ejecutando Exercici_02...");
 
-        // Ejecución de las operaciones de Exercici_02 con mensaje de estado
         new ShowAllOrdersUnderVenta().execute(collection);   // 2.a
         new ShowOrdersFromSeattle().execute(collection);     // 2.b
         new ShowOrdersWithPriceAbove50().execute(collection); // 2.c
@@ -95,5 +98,49 @@ public class Main {
         new UpdateRecipeStep().execute(collection);  // 3.h
         new GenerateRecipeIndex().execute(collection);  // 3.i
     }
+
+    private static void executeExercici04(Collection collection) throws Exception {
+        System.out.println("\u001B[90m🚀 Començant Exercici_04...\u001B[0m");
+
+        // Ruta del archivo Excel en la carpeta `resources`
+        String excelFilePath = "src/main/resources/Lista-de-clientes-con-nombre-y-direccion.xlsx";
+        // Ruta de salida para el archivo XML en la carpeta `output`
+        String outputXmlFileName = "clients.xml";
+
+        // Subapartado 4.a: Convertir Excel a XML
+        new ConvertExcelToXML().execute(
+                excelFilePath, // Archivo Excel
+                outputXmlFileName, // Nombre del archivo XML
+                collection // Conexión a eXistDB
+        );
+
+        // Subapartado 4.b: Añadir un nuevo cliente
+        new AddNewClient().execute("output/clients.xml");
+
+        // Subapartado 4.c: Eliminar un cliente por ID
+        new DeleteClientById().execute("output/clients.xml");
+
+        // Subapartado 4.d: Modificar los datos de un cliente
+        new UpdateClientData().execute("output/clients.xml");
+
+        // Subapartado 4.e: Listar clientes por categoría
+        new ListClientsByCategory().execute(
+                "output/clients.xml",  // Ruta del archivo original
+                "output/clientsByCategory.xml" // Ruta del archivo filtrado
+        );
+
+
+        // Subapartado 4.f: Ordenar clientes por fecha de alta en orden ascendente
+        new SortClientsByRegistrationDate().execute(collection, "asc");
+
+        // Subapartado 4.g: Listar clientes nacidos antes de una fecha
+        new ListClientsBornBeforeDate().execute(collection, "1980-01-01");
+
+        // Subapartado 4.h: Actualizar categoría a "Senior" para clientes mayores de 50 años
+        new UpdateClientsToSenior().execute(collection);
+
+        System.out.println("\u001B[32mExercici_04 completat!✅\u001B[0m");
+    }
+
 
 }
