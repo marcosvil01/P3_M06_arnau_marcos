@@ -2,13 +2,16 @@ package Exercici_04;
 
 import Functions.Functions;
 import org.w3c.dom.*;
+import org.xmldb.api.base.Collection;
+import org.xmldb.api.modules.XMLResource;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.Scanner;
 
 public class DeleteClientById {
-    public void execute(String xmlFilePath) throws Exception {
+    public void execute(String xmlFilePath, Collection collection) throws Exception {
         // Cargar el archivo XML
         File xmlFile = new File(xmlFilePath);
         if (!xmlFile.exists()) {
@@ -60,8 +63,11 @@ public class DeleteClientById {
             }
         }
 
-        // Guardar el archivo XML actualizado
+        // Guardar el archivo XML actualizado localmente
         Functions.saveDocument(doc, xmlFilePath);
+
+        // Actualizar el archivo XML en eXistDB
+        updateExistDB(collection, doc, xmlFilePath);
 
         // Registrar la operación en el log
         Functions.writeLog("ex4_c.log", logMessage.toString(), true);
@@ -69,4 +75,14 @@ public class DeleteClientById {
         System.out.println("\u001B[32mExercici 4.c fet!✅ Client eliminat.\u001B[0m");
     }
 
+    private void updateExistDB(Collection collection, Document doc, String resourceName) throws Exception {
+        // Obtener el recurso de eXistDB
+        XMLResource resource = (XMLResource) collection.createResource(resourceName, "XMLResource");
+
+        // Actualizar el contenido del recurso
+        resource.setContentAsDOM(doc);
+        collection.storeResource(resource);
+
+        System.out.println("\u001B[34mArchivo actualizado en eXistDB: " + resourceName + "\u001B[0m");
+    }
 }

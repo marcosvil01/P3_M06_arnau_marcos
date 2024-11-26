@@ -2,6 +2,9 @@ package Exercici_04;
 
 import Functions.*;
 import org.w3c.dom.*;
+import org.xmldb.api.base.Collection;
+import org.xmldb.api.modules.XMLResource;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
@@ -11,7 +14,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class AddNewClient {
-    public void execute(String xmlFilePath) throws Exception {
+    public void execute(String xmlFilePath, Collection collection) throws Exception {
         File xmlFile = new File(xmlFilePath);
         File outputDir = xmlFile.getParentFile();
 
@@ -36,7 +39,7 @@ public class AddNewClient {
         Scanner scanner = new Scanner(System.in);
 
         // Preguntar si se desean ingresar datos manualmente o generar aleatorios
-        System.out.println("Vols introduir les dades manualment? (S/N):");
+        System.out.println("Vols introduir les dades manualment? (S):");
         String respuesta = scanner.nextLine().trim().toUpperCase();
 
         String clientId, nom, dataNaixement, adreça, telèfon, correu, dataAlta, categoria, localitat;
@@ -62,14 +65,14 @@ public class AddNewClient {
             // Generar datos aleatorios
             Random random = new Random();
             clientId = generateUniqueId(doc);
-            nom = "Client Random " + random.nextInt(1000);
-            dataNaixement = "01/01/" + (1950 + random.nextInt(70)); // Año aleatorio entre 1950 y 2020
-            adreça = "Carrer Aleatori " + random.nextInt(100);
+            nom = "Jorge Flores";
+            dataNaixement = "01/01/" + (1950 + random.nextInt(60));
+            adreça = "Carrer de l'Alzina 291";
             telèfon = String.format("(%03d) %03d-%04d", random.nextInt(1000), random.nextInt(1000), random.nextInt(10000));
-            correu = "client" + random.nextInt(1000) + "@example.com";
+            correu = "jflores@gmail";
             dataAlta = "12/12/2024";
             categoria = "A";
-            localitat = "Localitat Aleatoria, CP " + random.nextInt(99999);
+            localitat = "Bosnia, CP " + random.nextInt(99999);
         }
 
         String adreçaCompleta = adreça + ", " + localitat;
@@ -89,8 +92,11 @@ public class AddNewClient {
         // Añadir el nuevo nodo al documento
         root.appendChild(client);
 
-        // Guardar el documento actualizado
+        // Guardar el documento actualizado localmente
         Functions.saveDocument(doc, xmlFilePath);
+
+        // Guardar el documento actualizado en eXistDB
+        updateExistDB(collection, doc, xmlFilePath);
 
         // Log de la operación
         String logMessage = String.format("""
@@ -107,6 +113,17 @@ public class AddNewClient {
         Functions.writeLog("ex4_b.log", logMessage, true);
 
         System.out.println("\u001B[32mExercici 4.b fet!✅ Client afegit al XML: ID=" + clientId + ", Nom=" + nom + "\u001B[0m");
+    }
+
+    private void updateExistDB(Collection collection, Document doc, String resourceName) throws Exception {
+        // Obtener el recurso de eXistDB
+        XMLResource resource = (XMLResource) collection.createResource(resourceName, "XMLResource");
+
+        // Actualizar el contenido del recurso
+        resource.setContentAsDOM(doc);
+        collection.storeResource(resource);
+
+        System.out.println("\u001B[34mArchivo actualizado en eXistDB: " + resourceName + "\u001B[0m");
     }
 
     private boolean idExists(Document doc, String id) {
@@ -144,5 +161,4 @@ public class AddNewClient {
         }
         return input;
     }
-
 }

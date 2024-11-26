@@ -115,29 +115,35 @@ public class Main {
         );
 
         // Subapartado 4.b: Añadir un nuevo cliente
-        new AddNewClient().execute("output/clients.xml");
+        new AddNewClient().execute("output/clients.xml", collection);
 
         // Subapartado 4.c: Eliminar un cliente por ID
-        new DeleteClientById().execute("output/clients.xml");
+        new DeleteClientById().execute("output/clients.xml", collection);
 
         // Subapartado 4.d: Modificar los datos de un cliente
-        new UpdateClientData().execute("output/clients.xml");
+        new UpdateClientData().execute("output/clients.xml", collection);
 
         // Subapartado 4.e: Listar clientes por categoría
         new ListClientsByCategory().execute(
-                "output/clients.xml",  // Ruta del archivo original
-                "output/clientsByCategory.xml" // Ruta del archivo filtrado
+                "output/clients.xml",
+                "output/clientsByCategory.xml",
+                collection
         );
 
 
         // Subapartado 4.f: Ordenar clientes por fecha de alta en orden ascendente
-        new SortClientsByRegistrationDate().execute(collection, "asc");
+        new SortClientsByRegistrationDate().execute(
+                collection,       // Colección de eXistDB
+                "output/sortedClients.xml" // Ruta del archivo XML local
+        );
+
+
 
         // Subapartado 4.g: Listar clientes nacidos antes de una fecha
-        new ListClientsBornBeforeDate().execute(collection, "1980-01-01");
+        new ListClientsBornBeforeDate().execute(collection, "output/clientsBeforeDate.xml");
 
         // Subapartado 4.h: Actualizar categoría a "Senior" para clientes mayores de 50 años
-        new UpdateClientsToSenior().execute(collection);
+        new UpdateClientsToSenior().execute(collection, "output/clients.xml");
 
         System.out.println("\u001B[32mExercici_04 completat!✅\u001B[0m");
     }

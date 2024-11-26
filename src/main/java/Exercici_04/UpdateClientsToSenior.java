@@ -1,13 +1,19 @@
 package Exercici_04;
 
 import Functions.Functions;
+import org.w3c.dom.*;
 import org.xmldb.api.base.Collection;
+import org.xmldb.api.modules.XMLResource;
 import org.xmldb.api.modules.XQueryService;
-import org.xmldb.api.base.ResourceSet;
-import org.xmldb.api.base.Resource;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class UpdateClientsToSenior {
-    public void execute(Collection col) throws Exception {
+    public void execute(Collection col, String outputFilePath) throws Exception {
+        // Normalizar las fechas al formato YYYY-MM-DD
+        normalizeDates(col);
+
         XQueryService service = (XQueryService) col.getService("XQueryService", "1.0");
 
         // Consulta para seleccionar clientes mayores de 50 años
@@ -20,48 +26,75 @@ public class UpdateClientsToSenior {
                         <nom>{data($client/nom)}</nom>
                         <dataNaixement>{data($client/dataNaixement)}</dataNaixement>
                         <adreça>{data($client/adreça)}</adreça>
-                        <localitat>{data($client/localitat)}</localitat>
                         <telèfon>{data($client/telèfon)}</telèfon>
                         <correu>{data($client/correu)}</correu>
                         <dataAlta>{data($client/dataAlta)}</dataAlta>
-                        <categoria>{data($client/categoria)}</categoria>
+                        <categoria>Senior</categoria>
                    </client>
         """;
 
-        // Ejecutar la consulta y recoger los resultados
-        ResourceSet result = service.query(selectQuery);
+        // Ejecutar la consulta para obtener clientes mayores de 50 años
+        var result = service.query(selectQuery);
 
-        // Crear contenido del log
-        StringBuilder logContent = new StringBuilder();
-        logContent.append("Clients actualitzats a 'Senior':\n\n");
+        // Crear un nuevo documento XML con los clientes actualizados
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        Document newDoc = docBuilder.newDocument();
 
-        // Iterar sobre los clientes seleccionados y registrar la información
+        // Crear el nodo raíz
+        Element rootElement = newDoc.createElement("clients");
+        newDoc.appendChild(rootElement);
+
+        // Verificar si hay resultados y añadir los clientes al nuevo documento
         boolean clientsFound = false;
-        for (int i = 0; i < result.getSize(); i++) {
-            Resource res = result.getResource(i);
-            logContent.append(res.getContent().toString()).append("\n\n");
+        for (long i = 0; i < result.getSize(); i++) {
+            XMLResource resource = (XMLResource) result.getResource(i);
+            String clientXML = (String) resource.getContent(); // Obtener como texto
+            Node clientNode = docBuilder.parse(new java.io.ByteArrayInputStream(clientXML.getBytes())).getDocumentElement();
+            Node importedClient = newDoc.importNode(clientNode, true);
+            rootElement.appendChild(importedClient);
             clientsFound = true;
         }
 
-        // Si no se encuentran clientes, añadir un mensaje al log
+        // Si no se encuentran clientes, registrar en el log y finalizar
         if (!clientsFound) {
-            logContent.append("Cap client compleix els criteris per ser actualitzat a 'Senior'.\n");
+            String logMessage = "Cap client compleix els criteris per ser actualitzat a 'Senior'.\n";
+            Functions.writeLog("ex4_h.log", logMessage, false);
+            System.out.println("\u001B[31mNo s'han trobat clients majors de 50 anys.\u001B[0m");
+            return;
         }
 
-        // Consulta para actualizar la categoría a "Senior"
-        String updateQuery = """
-            let $currentDate := current-date()
+        // Guardar el nuevo archivo XML localmente
+        Functions.saveDocument(newDoc, outputFilePath);
+
+        // Subir el archivo a eXistDB
+        uploadToExistDB(col, newDoc, "clientsSenior.xml");
+
+        // Log de la operación
+        String logMessage = "Clients actualitzats a 'Senior' i guardats al fitxer: " + outputFilePath + "\n";
+        Functions.writeLog("ex4_h.log", logMessage, false);
+
+        System.out.println("\u001B[32mExercici 4.h fet!✅ Clients actualitzats a 'Senior' i arxiu pujat a eXistDB: clientsSenior.xml\u001B[0m");
+    }
+
+    private void normalizeDates(Collection col) throws Exception {
+        XQueryService service = (XQueryService) col.getService("XQueryService", "1.0");
+        String xquery = """
             for $client in /clients/client
-            where year-from-date($currentDate) - year-from-date(xs:date($client/dataNaixement)) > 50
-            return update replace $client/categoria with <categoria>Senior</categoria>
+            let $oldDate := $client/dataNaixement
+            let $newDate := fn:replace($oldDate, '(\\d{2})/(\\d{2})/(\\d{4})', '$3-$1-$2')
+            return if ($newDate != $oldDate) then replace value of node $client/dataNaixement with $newDate else ()
         """;
+        service.query(xquery);
+        System.out.println("\u001B[34mFechas normalizadas al formato YYYY-MM-DD.\u001B[0m");
+    }
 
-        // Ejecutar la consulta de actualización
-        service.query(updateQuery);
+    private void uploadToExistDB(Collection collection, Document doc, String resourceName) throws Exception {
+        // Crear un recurso nuevo en eXistDB
+        XMLResource resource = (XMLResource) collection.createResource(resourceName, "XMLResource");
+        resource.setContentAsDOM(doc);
+        collection.storeResource(resource);
 
-        // Escribir el log
-        Functions.writeLog("ex4_h.log", logContent.toString(), false); // Sobrescribir el archivo
-
-        System.out.println("\u001B[32mExercici 4.h fet!✅ Categoria actualitzada a 'Senior' per clients majors de 50 anys\u001B[0m");
+        System.out.println("\u001B[34mNou arxiu pujat a eXistDB: " + resourceName + "\u001B[0m");
     }
 }

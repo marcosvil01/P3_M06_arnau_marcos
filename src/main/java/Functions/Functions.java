@@ -10,10 +10,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 
@@ -105,26 +102,30 @@ public class Functions {
 
 
     public static File saveDocument(Document doc, String filePath) throws Exception {
-        // Convertir la ruta en un Path seguro
+        // Convertir la ruta a un objeto Path seguro
         Path safePath = Paths.get(filePath).toAbsolutePath().normalize();
         File file = safePath.toFile();
 
         // Verificar o crear el directorio
         ensureDirectoryExists(file.getParentFile());
 
-        System.out.println("\u001B[34mDesant fitxer a: " + file.getCanonicalPath() + "\u001B[0m");
+        // Mostrar la ruta final para depuración
+        System.out.println("\u001B[34mDesant fitxer a: " + safePath.toString() + "\u001B[0m");
 
         try {
+            // Configurar el Transformer para guardar el XML
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(file);
 
-            // Ejecutar la transformación y guardar el archivo
-            transformer.transform(source, result);
+            // Usar StreamResult con un FileOutputStream para evitar problemas de codificación
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                StreamResult result = new StreamResult(outputStream);
+                transformer.transform(source, result);
+            }
 
-            System.out.println("\u001B[32mFitxer desat correctament: " + file.getCanonicalPath() + "\u001B[0m");
+            System.out.println("\u001B[32mFitxer desat correctament: " + safePath.toString() + "\u001B[0m");
             return file;
         } catch (FileNotFoundException e) {
             System.err.println("\u001B[31mError: No se encontró la ruta del archivo. Verifica permisos y caracteres especiales en la ruta.\u001B[0m");
@@ -134,6 +135,7 @@ public class Functions {
             throw e;
         }
     }
+
 
 
 
