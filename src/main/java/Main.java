@@ -103,7 +103,7 @@ public class Main {
         System.out.println("\u001B[90m🚀 Començant Exercici_04...\u001B[0m");
 
         // Ruta del archivo Excel en la carpeta `resources`
-        String excelFilePath = "src/main/resources/Lista-de-clientes-con-nombre-y-direccion.xlsx";
+        String excelFilePath = "input/Lista-de-clientes-con-nombre-y-direccion.xlsx";
         // Ruta de salida para el archivo XML en la carpeta `output`
         String outputXmlFileName = "clients.xml";
 
