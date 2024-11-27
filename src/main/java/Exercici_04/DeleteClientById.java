@@ -70,7 +70,7 @@ public class DeleteClientById {
         updateExistDB(collection, doc, xmlFilePath);
 
         // Registrar la operación en el log
-        Functions.writeLog("ex4_c.log", logMessage.toString(), true);
+        // Functions.writeLog("ex4_c.log", logMessage.toString(), true); // Logging
 
         System.out.println("\u001B[32mExercici 4.c fet!✅ Client eliminat.\u001B[0m");
     }

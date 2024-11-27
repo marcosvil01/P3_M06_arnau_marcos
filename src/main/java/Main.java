@@ -100,9 +100,9 @@ public class Main {
     }
 
     private static void executeExercici04(Collection collection) throws Exception {
-        System.out.println("\u001B[90m🚀 Començant Exercici_04...\u001B[0m");
+        System.out.println("Ejecutando Exercici_04...");
 
-        // Ruta del archivo Excel en la carpeta `resources`
+        // Ruta del archivo Excel en la carpeta `input`
         String excelFilePath = "input/Lista-de-clientes-con-nombre-y-direccion.xlsx";
         // Ruta de salida para el archivo XML en la carpeta `output`
         String outputXmlFileName = "clients.xml";
@@ -130,14 +130,11 @@ public class Main {
                 collection
         );
 
-
         // Subapartado 4.f: Ordenar clientes por fecha de alta en orden ascendente
         new SortClientsByRegistrationDate().execute(
                 collection,       // Colección de eXistDB
                 "output/sortedClients.xml" // Ruta del archivo XML local
         );
-
-
 
         // Subapartado 4.g: Listar clientes nacidos antes de una fecha
         new ListClientsBornBeforeDate().execute(collection, "output/clientsBeforeDate.xml");

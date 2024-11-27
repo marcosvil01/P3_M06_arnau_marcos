@@ -59,7 +59,7 @@ public class UpdateClientsToSenior {
         // Si no se encuentran clientes, registrar en el log y finalizar
         if (!clientsFound) {
             String logMessage = "Cap client compleix els criteris per ser actualitzat a 'Senior'.\n";
-            Functions.writeLog("ex4_h.log", logMessage, false);
+            // Functions.writeLog("ex4_h.log", logMessage, false); // Logging
             System.out.println("\u001B[31mNo s'han trobat clients majors de 50 anys.\u001B[0m");
             return;
         }
@@ -72,7 +72,7 @@ public class UpdateClientsToSenior {
 
         // Log de la operación
         String logMessage = "Clients actualitzats a 'Senior' i guardats al fitxer: " + outputFilePath + "\n";
-        Functions.writeLog("ex4_h.log", logMessage, false);
+        // Functions.writeLog("ex4_h.log", logMessage, false); // Logging
 
         System.out.println("\u001B[32mExercici 4.h fet!✅ Clients actualitzats a 'Senior' i arxiu pujat a eXistDB: clientsSenior.xml\u001B[0m");
     }

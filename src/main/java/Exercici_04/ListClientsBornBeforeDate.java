@@ -53,7 +53,7 @@ public class ListClientsBornBeforeDate {
         // Si no se encuentran clientes, registrar en el log y finalizar
         if (!clientsFound) {
             String logMessage = "Cap client nascut abans de la data especificada.\n";
-            Functions.writeLog("ex4_g.log", logMessage, false);
+            // Functions.writeLog("ex4_g.log", logMessage, false); // Logging
             System.out.println("\u001B[31mNo s'han trobat clients nascuts abans de la data especificada.\u001B[0m");
             return;
         }
@@ -64,9 +64,9 @@ public class ListClientsBornBeforeDate {
         // Subir el archivo a eXistDB
         uploadToExistDB(col, newDoc, "clientsBeforeDate.xml");
 
-        // Log de la operación
-        String logMessage = "Clients nascuts abans de la data especificada i guardats al fitxer: " + outputFilePath + "\n";
-        Functions.writeLog("ex4_g.log", logMessage, false);
+        // Logging
+        // String logMessage = "Clients nascuts abans de la data especificada i guardats al fitxer: " + outputFilePath + "\n";
+        // Functions.writeLog("ex4_g.log", logMessage, false);
 
         System.out.println("\u001B[32mExercici 4.g fet!✅ Clients filtrats i arxiu pujat a eXistDB: clientsBeforeDate.xml\u001B[0m");
     }

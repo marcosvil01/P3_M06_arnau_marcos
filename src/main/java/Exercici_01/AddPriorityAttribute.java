@@ -7,7 +7,7 @@ import org.xmldb.api.modules.XQueryService;
 
 public class AddPriorityAttribute {
     public void execute(Collection col) throws Exception {
-        System.out.println("\u001B[90m🚀 Començant exercici ...\u001B[0m");
+        System.out.println("\u001B[90m🚀 Començant exercici 1.e...\u001B[0m");
         XQueryService service = (XQueryService) col.getService("XQueryService", "1.0");
         String xquery = """
             update insert attribute Priority { 'High' }

@@ -24,6 +24,8 @@ public class Functions {
      * @param append     Indica si s'ha d'afegir al fitxer existent o sobreescriure'l.
      */
     public static void writeLog(String fileName, String logContent, boolean append) {
+        /// Eliminamos los logs, pero dejamos la funcion sin usar
+
         FileWriter writer = null;
         try {
             // Asegurar que el directorio exista

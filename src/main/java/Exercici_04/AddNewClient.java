@@ -110,7 +110,7 @@ public class AddNewClient {
                 Data d'Alta: %s
                 Categoria: %s
                 """, clientId, nom, dataNaixement, adreçaCompleta, telèfon, correu, dataAlta, categoria);
-        Functions.writeLog("ex4_b.log", logMessage, true);
+        // Functions.writeLog("ex4_b.log", logMessage, true); // Logging
 
         System.out.println("\u001B[32mExercici 4.b fet!✅ Client afegit al XML: ID=" + clientId + ", Nom=" + nom + "\u001B[0m");
     }

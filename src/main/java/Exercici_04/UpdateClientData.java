@@ -96,7 +96,8 @@ public class UpdateClientData {
                 Valor Antic: %s
                 Nou Valor: %s
                 """, clientId, fieldToUpdate, oldValue, newValue);
-        Functions.writeLog("ex4_d.log", logMessage, true);
+
+        // Functions.writeLog("ex4_d.log", logMessage, true); // Logging
 
         System.out.println("\u001B[32mExercici 4.d fet!✅ Camp actualitzat: " + fieldToUpdate + ", Valor Antic: " + oldValue + ", Nou Valor: " + newValue + "\u001B[0m");
     }
